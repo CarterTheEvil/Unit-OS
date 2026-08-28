@@ -3,12 +3,12 @@
 
 #include <stdint.h>
 
-/* VGA text mode dimensions */
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 
-/* Screen colors */
-enum vga_color {
+
+enum vga_color
+{
     VGA_BLACK = 0,
     VGA_BLUE = 1,
     VGA_GREEN = 2,
@@ -27,25 +27,22 @@ enum vga_color {
     VGA_WHITE = 15
 };
 
-/* Initialize the renderer */
+
 void rendering_init(void);
 
-/* Clear the screen */
 void rendering_clear(void);
 
-/* Set text color */
-void rendering_set_color(uint8_t foreground, uint8_t background);
+void rendering_set_color(
+    uint8_t foreground,
+    uint8_t background
+);
 
-/* Put one character on the screen */
 void rendering_putchar(char c);
 
-/* Print a string */
 void rendering_print(const char *str);
 
-/* Print a string followed by a newline */
 void rendering_println(const char *str);
 
-/* Move cursor */
-void rendering_set_cursor(uint8_t x, uint8_t y);
+void rendering_backspace(void);
 
 #endif
