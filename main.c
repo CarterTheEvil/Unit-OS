@@ -1,22 +1,19 @@
-#include <stdio.h>
+#include "rendering.h"
 
-int main() {
+void kernel_main(unsigned int magic, unsigned int multiboot_info)
+{
+    (void)magic;
+    (void)multiboot_info;
 
-    char input[100]; 
+    rendering_init();
 
-    printf("Welcome to Unit OS\n");
-    printf("------------------\n\n");
+    rendering_println("Welcome to Unit-OS");
+    rendering_println("-------------------");
+    rendering_println("");
+    rendering_print("UnitOS-Main> ");
 
-    while(1) {
-
-        printf("UnitOS> "); 
-        
-
-        if (fgets(input, sizeof(input), stdin) != NULL) {
-            
-
-        }
+    while (1)
+    {
+        asm volatile ("hlt");
     }
-    
-    return 0;
 }
