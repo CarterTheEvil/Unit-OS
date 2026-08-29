@@ -1,0 +1,435 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+    <TITLE>Unit-OS :: Download &amp; Information</TITLE>
+    <STYLE>
+        BODY {
+            background-color: #FFFFCC;
+            color: #000000;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 20px;
+        }
+        .main-table {
+            width: 100%;
+            max-width: 780px;
+            margin: 0 auto;
+            border: 4px ridge #808080;
+            background-color: #FFFFE0;
+        }
+        .header-bar {
+            background: #000080;
+            color: #FFFF00;
+            padding: 10px 15px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-bottom: 3px ridge #808080;
+        }
+        .header-sub {
+            background: #000060;
+            color: #FFFFFF;
+            padding: 6px 15px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            border-bottom: 2px ridge #808080;
+        }
+        .content-area {
+            padding: 20px;
+        }
+        H1 {
+            font-size: 22px;
+            color: #000080;
+            border-bottom: 2px solid #000080;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+        H2 {
+            font-size: 16px;
+            color: #333333;
+            margin-top: 20px;
+        }
+        P {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+        A {
+            color: #0000EE;
+            text-decoration: underline;
+        }
+        A:visited {
+            color: #551A8B;
+        }
+        A:hover {
+            color: #FF0000;
+        }
+        .btn-download {
+            display: inline-block;
+            background: #C0C0C0;
+            border: 2px outset #FFFFFF;
+            padding: 8px 24px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            font-weight: bold;
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+            margin: 8px 6px;
+        }
+        .btn-download:active {
+            border-style: inset;
+        }
+        .btn-download:hover {
+            background: #D0D0D0;
+        }
+        .warning-banner {
+            background: #FFFACD;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #800000;
+        }
+        .warning-banner A {
+            color: #800000;
+        }
+        .info-box {
+            background: #E0E0FF;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .cmd-box {
+            background: #000000;
+            color: #00FF00;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            padding: 12px 15px;
+            border: 2px inset #808080;
+            margin: 10px 0;
+        }
+        .cmd-box .prompt {
+            color: #00FFFF;
+        }
+        .note-box {
+            background: #E0FFE0;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #006600;
+        }
+        TABLE.file-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        TABLE.file-table TH {
+            background: #000080;
+            color: #FFFFFF;
+            padding: 6px 10px;
+            text-align: left;
+            border: 1px solid #808080;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+        }
+        TABLE.file-table TD {
+            padding: 5px 10px;
+            border: 1px solid #808080;
+            background: #FFFFE0;
+        }
+        TABLE.file-table TR:hover TD {
+            background: #FFFF99;
+        }
+        TABLE.status-table {
+            width: 100%;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        TABLE.status-table TD {
+            padding: 4px 8px;
+        }
+        .status-ok {
+            color: #008000;
+            font-weight: bold;
+        }
+        .status-wip {
+            color: #CC6600;
+            font-weight: bold;
+        }
+        HR {
+            border: none;
+            border-top: 2px ridge #808080;
+            margin: 25px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #666666;
+            border-top: 2px ridge #808080;
+            background: #F0F0D0;
+        }
+        .top-bar {
+            background: #C0C0C0;
+            border: 2px inset #808080;
+            padding: 4px 10px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 11px;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        .kernel-badge {
+            display: inline-block;
+            background: #000080;
+            color: #00FF00;
+            padding: 3px 10px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 11px;
+            border: 2px outset #FFFFFF;
+            margin-left: 10px;
+        }
+        .usb-note {
+            background: #FFE0E0;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #800000;
+        }
+    </STYLE>
+</HEAD>
+<BODY>
+
+<DIV CLASS="main-table">
+
+    <!-- Header -->
+    <DIV CLASS="header-bar">
+        ___  ___  ___ _   _  ___ _____  ___ ___  ___ _____
+        |  \/  ||   \ \ / || __|_   _|/ __/ _ \| _ \_   _|
+        | |\/| || |) \ V / | _|  | | | (_| (_) |  _/ | |
+        |_|  |_||___/ \_/  |___| |_| \___\___/|_|    |_|
+    </DIV>
+    <DIV CLASS="header-sub">
+        Version 0.0.1 Pre-Alpha &bull; x86 Bootable &bull; Last Updated: Aug 2026 &bull;
+        <SPAN CLASS="kernel-badge">STATUS: EARLY DEV</SPAN>
+    </DIV>
+
+    <!-- Top Bar -->
+    <DIV CLASS="top-bar">
+        [ HOME ] [ FILES ] [ DOWNLOAD ] [ DOCS ] [ FAQ ] &nbsp;&nbsp;&nbsp;
+        Guest User &nbsp;|&nbsp; No login required &nbsp;|&nbsp; Best viewed in 800x600
+    </DIV>
+
+    <!-- Content -->
+    <DIV CLASS="content-area">
+
+        <!-- Welcome -->
+        <H1>Welcome to Unit-OS</H1>
+        <P>
+            This is a mini operating system I'm building as a hobby project.
+            It boots via <A HREF="#">GRUB</A>, runs under <A HREF="#">QEMU</A>,
+            and is written primarily in <A HREF="#">C</A> and <A HREF="#">x86 Assembly</A>.
+        </P>
+        <P>
+            The current version includes a bootable kernel with a minimal
+            command interpreter, basic rendering, and PS/2 keyboard input support.
+        </P>
+
+        <TABLE CLASS="status-table">
+            <TR><TD WIDTH="140"><B>Project Status:</B></TD><TD><SPAN CLASS="status-wip">Early Development</SPAN> &mdash; Super simple core features only</TD></TR>
+            <TR><TD><B>Version:</B></TD><TD>0.0.1 Pre-Alpha (Tag: v0.0.1)</TD></TR>
+            <TR><TD><B>Architecture:</B></TD><TD>x86 (32-bit), boots in QEMU</TD></TR>
+            <TR><TD><B>File Count:</B></TD><TD><SPAN CLASS="status-ok">9 source files</SPAN> &mdash; Ready to compile</TD></TR>
+            <TR><TD><B>Languages:</B></TD><TD>C (84.8%), Assembly (7.9%), Makefile (6.1%), Linker Script (1.2%)</TD></TR>
+        </TABLE>
+
+        <HR>
+
+        <!-- Core Files -->
+        <H1>Source Files</H1>
+        <P>Here is the current file listing (<B>9 files</B> total, excluding README):</P>
+
+        <TABLE CLASS="file-table">
+            <TR>
+                <TH>File</TH>
+                <TH>Role</TH>
+                <TH>Status</TH>
+            </TR>
+            <TR>
+                <TD><A HREF="#">boot_kernel.asm</A></TD>
+                <TD>Assembly boot code &mdash; CPU init, GRUB handoff</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">main.c</A></TD>
+                <TD>Command interpreter &amp; main entry point</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">linker.ld</A></TD>
+                <TD>Memory layout &amp; section definitions</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">interrupts.c</A></TD>
+                <TD>IDT setup &amp; PIC remapping</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">keyboard.c</A></TD>
+                <TD>PS/2 scan code driver (working!)</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">keyboard.h</A></TD>
+                <TD>Keyboard header file & key definitions</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">rendering.c</A></TD>
+                <TD>Video mode &amp; text rendering</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">rendering.h</A></TD>
+                <TD>Rendering header & function prototypes</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">Makefile</A></TD>
+                <TD>Build system &mdash; clean, build, run targets</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+        </TABLE>
+
+        <HR>
+
+        <!-- USB/PS2 Note -->
+        <DIV CLASS="usb-note">
+            <B>⌨️ PS/2 Keyboard Note:</B><BR><BR>
+            The keyboard driver currently only supports <B>PS/2 ports</B>, which are
+            outdated compared to modern USB keyboards. On real hardware you may need
+            a PS/2 adapter or native PS/2 motherboard support.<BR><BR>
+            <B>Recommendation:</B> Just use <A HREF="#">QEMU</A> for testing—it emulates
+            PS/2 controllers perfectly!
+        </DIV>
+
+        <HR>
+
+        <!-- Disclaimer -->
+        <DIV CLASS="warning-banner">
+            *** DISCLAIMER ***
+            <BR><BR>
+            This project is <B>not a real operating system</B>.
+            It is a hobby/learning project and is <B>not intended</B> for
+            any production use. Do not run it on hardware you care about!
+            Use QEMU or a VM if you feel adventurous.
+        </DIV>
+
+        <HR>
+
+        <!-- Installation -->
+        <H1>Compilation &amp; Requirements</H1>
+        <P>
+            This project targets <B>Linux</B> or <B>WSL</B> (Windows Subsystem for Linux).
+            You will need the following packages installed:
+        </P>
+
+        <DIV CLASS="cmd-box">
+            <SPAN CLASS="prompt">$</SPAN> sudo apt install gcc nasm grub-pc-bin grub-common xorriso qemu-system-x86
+        </DIV>
+
+        <P>Once dependencies are installed, build and run from the repository root:</P>
+
+        <TABLE CLASS="status-table">
+            <TR>
+                <TD WIDTH="50" ALIGN="CENTER">
+                    <DIV CLASS="cmd-box" STYLE="margin:0;"><SPAN CLASS="prompt">$</SPAN> make clean</DIV>
+                </TD>
+                <TD WIDTH="*">Step 1: Remove any previous build artifacts</TD>
+            </TR>
+            <TR>
+                <TD ALIGN="CENTER">
+                    <DIV CLASS="cmd-box" STYLE="margin:0;"><SPAN CLASS="prompt">$</SPAN> make</DIV>
+                </TD>
+                <TD>Step 2: Assemble &amp; link the OS image</TD>
+            </TR>
+            <TR>
+                <TD ALIGN="CENTER">
+                    <DIV CLASS="cmd-box" STYLE="margin:0;"><SPAN CLASS="prompt">$</SPAN> make run</DIV>
+                </TD>
+                <TD>Step 3: Launch in QEMU</TD>
+            </TR>
+        </TABLE>
+
+        <DIV CLASS="note-box">
+            <B>✅ Ready to Build:</B> All 9 source files are present and the project is
+            ready for compilation. The WIP stage is complete for basic boot functionality!
+        </DIV>
+
+        <HR>
+
+        <!-- Download -->
+        <H1>Download</H1>
+        <P>
+            The full source is available on GitHub.
+            You can clone or download the repository directly:
+        </P>
+        <P ALIGN="CENTER">
+            <A HREF="https://github.com/CarterTheEvil2000/Unit-OS" CLASS="btn-download" TARGET="_blank">
+                &#9660; Clone from GitHub
+            </A>
+            <A HREF="https://github.com/CarterTheEvil2000/Unit-OS/archive/refs/heads/main.zip" CLASS="btn-download" TARGET="_blank">
+                &#9660; Download .zip
+            </A>
+        </P>
+        <P ALIGN="CENTER" STYLE="font-size:11px; color:#666666;">
+            Source code only &bull; No binaries distributed &bull; Compile it yourself!
+        </P>
+
+        <HR>
+
+        <!-- FAQ -->
+        <H1>F.A.Q.</H1>
+        <P><B>Q: Why does it look like a text mode OS?</B></P>
+        <P>A: It's Pre-Alpha v0.0.1. Text mode rendering is the foundation—we're not doing fancy graphics yet!</P>
+
+        <P><B>Q: Can I run this on real hardware?</B></P>
+        <P>A: Technically yes (GRUB + any x86 machine), but please don't. Use QEMU unless you have spare hardware.</P>
+
+        <P><B>Q: Does the keyboard work?</B></P>
+        <P>A: Yes! But it's PS/2 only. Modern USB keyboards won't be recognized without an adapter or PS/2 motherboard ports. Again, QEMU solves this.</P>
+
+        <P><B>Q: What's the roadmap?</B></P>
+        <P>A: More interrupts, a proper keyboard buffer, basic file I/O, and eventually
+        a tiny shell. No promises on dates &mdash; this is a fun project, not a deadline.</P>
+
+        <HR>
+
+        <!-- Viewing Note -->
+        <DIV CLASS="info-box">
+            <B>NOTE:</B> This README is written in HTML for visual formatting.
+            For the best experience, download this file and open it in a browser,
+            or view it through an HTML preview. GitHub's raw file view will show
+            the source code instead of the rendered page.
+        </DIV>
+
+    </DIV>
+
+    <!-- Footer -->
+    <DIV CLASS="footer">
+        Unit-OS &copy; 2026 &bull; A solo hobby project &bull; No warranty, no support, just fun<br>
+        Best viewed in Netscape Navigator 4.0 or IE 5.0 &nbsp;|&nbsp;
+        <A HREF="https://github.com/CarterTheEvil2000/Unit-OS">GitHub Repository</A>
+    </DIV>
+
+</DIV>
+
+</BODY>
+</HTML>
