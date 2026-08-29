@@ -1,1 +1,1 @@
-Hello and welcome, Run Readme.html in a online complier or download and run for instruchons as readmes are limited to md forment and some html!
+Hello and welcome, Run Readme.html in a online complier or download and run for instruchons as readmes are limited to md forment and some html also I'm not working with a devleper team or a 2nd person so only me so if thares bugs with somthing Ill have to look into it but it might take a while!
