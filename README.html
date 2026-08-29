@@ -1,18 +1,241 @@
-<h1>Unit-OS</h1>
-<p> This is a mini OS I'm making Its going to be 3 files and might need to compile by yourself
-also if theirs only 2 or 1 file as this is a work in progress dont compile until all 3 files have been made!
-also this is not meant to be taken as a real os in the works this is just for fun.</p>
-<br>
-<p>you need to install some packages on wsl/linux for this to work:</p>
-<br>
-<p>sudo apt install gcc nasm grub-pc-bin grub-common xorriso qemu-system-x86</p>
-then:
-<br>
-make clean
-<br>
-make
-<br>
-then
-<br>
-make run
-<!-- also I know this is the readme so run (threw html complier online) or download this file to run and get a better formated readme -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit-OS - Mini Operating System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+            color: #c9d1d9;
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #58a6ff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.1em;
+            font-weight: normal;
+        }
+        /* Sections */
+        .section {
+            background: #161b22;
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .section-title {
+            color: #f0f6fc;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #58a6ff, #1f6feb);
+            border-radius: 2px;
+        }
+        p {
+            color: #c9d1d9;
+            margin-bottom: 15px;
+        }
+        /* Warning Box */
+        .warning {
+            background: linear-gradient(180deg, #1c2128 0%, #161b22 100%);
+            border-left: 4px solid #ffa657;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #f0f6fc;
+        }
+        .warning strong {
+            color: #ffa657;
+            display: block;
+            margin-bottom: 8px;
+        }
+        /* Code Blocks */
+        pre {
+            background: #0d1117;
+            padding: 15px 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+            margin: 15px 0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+        }
+        code {
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 13px;
+            color: #7ee787;
+        }
+        .command-prefix {
+            color: #8b949e;
+            margin-right: 8px;
+        }
+        /* Step List */
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+        .steps li {
+            position: relative;
+            padding-left: 45px;
+            margin: 15px 0;
+            color: #c9d1d9;
+        }
+        .steps li::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(180deg, #58a6ff, #1f6feb);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        /* Tags */
+        .tag-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .tag {
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 13px;
+        }
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .steps li {
+                padding-left: 40px;
+            }
+            .steps li::before {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header>
+            <h1>⚙️ Unit-OS</h1>
+            <div class="subtitle">A Mini Operating System Project</div>
+        </header>
+
+        <!-- About Section -->
+        <div class="section">
+            <div class="section-title">About This Project</div>
+            <p>This is a mini operating system I'm making. It's going to be 3 files total, and you may need to compile it yourself.</p>
+            <p><strong>⚠️ Important:</strong> If there are only 1 or 2 files in the repository, this is still a work in progress. <strong>Do not compile</strong> until all 3 files have been released!</p>
+        </div>
+
+        <!-- Disclaimer Section -->
+        <div class="warning">
+            <strong>📢 Disclaimer</strong>
+            This is not meant to be taken as a real operating system in production. This is purely for <strong>fun and educational purposes</strong>. Don't use it for anything critical!
+        </div>
+
+        <!-- Requirements Section -->
+        <div class="section">
+            <div class="section-title">📦 Installation Requirements</div>
+            <p>You need to install some packages on WSL/Linux for this to work:</p>
+            <pre><code><span class="command-prefix">$</span> sudo apt install gcc nasm grub-pc-bin grub-common xorriso qemu-system-x86</code></pre>
+            <div class="tag-container">
+                <span class="tag">GCC</span>
+                <span class="tag">NASM</span>
+                <span class="tag">GRUB</span>
+                <span class="tag">QEMU</span>
+                <span class="tag">xorriso</span>
+            </div>
+        </div>
+
+        <!-- Build Instructions Section -->
+        <div class="section">
+            <div class="section-title">🔨 Build Instructions</div>
+            <p>Once dependencies are installed, follow these steps:</p>
+            <ol class="steps">
+                <li>Clean any previous builds</li>
+                <pre><code><span class="command-prefix">$</span> make clean</code></pre>
+
+                <li>Compile the OS</li>
+                <pre><code><span class="command-prefix">$</span> make</code></pre>
+
+                <li>Run the compiled OS</li>
+                <pre><code><span class="command-prefix">$</span> make run</code></pre>
+            </ol>
+        </div>
+
+        <!-- Viewing Section -->
+        <div class="warning">
+            <strong>👁️ Best Way to Read This</strong>
+            Run this file through an HTML viewer (or download it) to see the properly formatted README. The raw GitHub view won't show the styling!
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Made with ❤️ • Solo Project • <a href="#">Back to GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>
