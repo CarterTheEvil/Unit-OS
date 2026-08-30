@@ -3,33 +3,46 @@
 #include <stdint.h>
 
 
-/* VGA text-mode memory */
+/* =================================================
+   VGA Text Buffer
+   ================================================= */
+
 static volatile uint16_t *const VGA_MEMORY =
     (volatile uint16_t *)0xB8000;
 
 
+/* =================================================
+   Cursor
+   ================================================= */
+
 static uint8_t cursor_x = 0;
 static uint8_t cursor_y = 0;
+
+
+/* =================================================
+   Current Color
+   ================================================= */
 
 static uint8_t current_color;
 
 
-/* -------------------------------------------------
-   Create VGA color
-   ------------------------------------------------- */
+/* =================================================
+   Create VGA Color
+   ================================================= */
 
 static uint8_t make_color(
     uint8_t foreground,
     uint8_t background
 )
 {
-    return foreground | (background << 4);
+    return foreground |
+           (background << 4);
 }
 
 
-/* -------------------------------------------------
-   Create VGA character entry
-   ------------------------------------------------- */
+/* =================================================
+   Create VGA Character Entry
+   ================================================= */
 
 static uint16_t make_entry(
     char character,
@@ -41,9 +54,9 @@ static uint16_t make_entry(
 }
 
 
-/* -------------------------------------------------
-   Write byte to hardware port
-   ------------------------------------------------- */
+/* =================================================
+   Port Output
+   ================================================= */
 
 static inline void outb(
     uint16_t port,
@@ -59,44 +72,77 @@ static inline void outb(
 }
 
 
-/* -------------------------------------------------
-   Update hardware cursor
-   ------------------------------------------------- */
+/* =================================================
+   Update Hardware Cursor
+   ================================================= */
 
 static void update_cursor(void)
 {
     uint16_t position =
-        cursor_y * VGA_WIDTH + cursor_x;
+        cursor_y * VGA_WIDTH +
+        cursor_x;
 
 
-    /* Cursor low byte */
+    /*
+     * Cursor low byte.
+     */
 
-    outb(0x3D4, 0x0F);
-    outb(0x3D5, position & 0xFF);
+    outb(
+        0x3D4,
+        0x0F
+    );
+
+    outb(
+        0x3D5,
+        position & 0xFF
+    );
 
 
-    /* Cursor high byte */
+    /*
+     * Cursor high byte.
+     */
 
-    outb(0x3D4, 0x0E);
-    outb(0x3D5, position >> 8);
+    outb(
+        0x3D4,
+        0x0E
+    );
+
+    outb(
+        0x3D5,
+        position >> 8
+    );
 }
 
 
-/* -------------------------------------------------
-   Scroll screen
-   ------------------------------------------------- */
+/* =================================================
+   Scroll Screen
+   ================================================= */
 
 static void scroll(void)
 {
+    /*
+     * Nothing to scroll yet.
+     */
+
     if (cursor_y < VGA_HEIGHT)
         return;
 
 
-    /* Move every line up */
+    /*
+     * Move all lines up one row.
+     */
 
-    for (uint8_t y = 1; y < VGA_HEIGHT; y++)
+    for (
+        uint8_t y = 1;
+        y < VGA_HEIGHT;
+        y++
+    )
     {
-        for (uint8_t x = 0; x < VGA_WIDTH; x++)
+        for (
+            uint8_t x = 0;
+            x < VGA_WIDTH;
+            x++
+        )
         {
             VGA_MEMORY[
                 (y - 1) * VGA_WIDTH + x
@@ -108,12 +154,20 @@ static void scroll(void)
     }
 
 
-    /* Clear bottom line */
+    /*
+     * Clear the bottom line.
+     */
 
-    for (uint8_t x = 0; x < VGA_WIDTH; x++)
+    for (
+        uint8_t x = 0;
+        x < VGA_WIDTH;
+        x++
+    )
     {
         VGA_MEMORY[
-            (VGA_HEIGHT - 1) * VGA_WIDTH + x
+            (VGA_HEIGHT - 1) *
+            VGA_WIDTH +
+            x
         ] =
             make_entry(
                 ' ',
@@ -122,13 +176,18 @@ static void scroll(void)
     }
 
 
-    cursor_y = VGA_HEIGHT - 1;
+    /*
+     * Move cursor to bottom line.
+     */
+
+    cursor_y =
+        VGA_HEIGHT - 1;
 }
 
 
-/* -------------------------------------------------
-   Initialize renderer
-   ------------------------------------------------- */
+/* =================================================
+   Initialize Rendering
+   ================================================= */
 
 void rendering_init(void)
 {
@@ -142,15 +201,23 @@ void rendering_init(void)
 }
 
 
-/* -------------------------------------------------
-   Clear screen
-   ------------------------------------------------- */
+/* =================================================
+   Clear Screen
+   ================================================= */
 
 void rendering_clear(void)
 {
-    for (uint8_t y = 0; y < VGA_HEIGHT; y++)
+    for (
+        uint8_t y = 0;
+        y < VGA_HEIGHT;
+        y++
+    )
     {
-        for (uint8_t x = 0; x < VGA_WIDTH; x++)
+        for (
+            uint8_t x = 0;
+            x < VGA_WIDTH;
+            x++
+        )
         {
             VGA_MEMORY[
                 y * VGA_WIDTH + x
@@ -166,13 +233,14 @@ void rendering_clear(void)
     cursor_x = 0;
     cursor_y = 0;
 
+
     update_cursor();
 }
 
 
-/* -------------------------------------------------
-   Set text color
-   ------------------------------------------------- */
+/* =================================================
+   Set Text Color
+   ================================================= */
 
 void rendering_set_color(
     uint8_t foreground,
@@ -187,27 +255,33 @@ void rendering_set_color(
 }
 
 
-/* -------------------------------------------------
-   Print one character
-   ------------------------------------------------- */
+/* =================================================
+   Print Character
+   ================================================= */
 
 void rendering_putchar(char c)
 {
-    /* New line */
+    /*
+     * Newline.
+     */
 
     if (c == '\n')
     {
         cursor_x = 0;
+
         cursor_y++;
 
         scroll();
+
         update_cursor();
 
         return;
     }
 
 
-    /* Carriage return */
+    /*
+     * Carriage return.
+     */
 
     if (c == '\r')
     {
@@ -219,7 +293,9 @@ void rendering_putchar(char c)
     }
 
 
-    /* Backspace */
+    /*
+     * Backspace.
+     */
 
     if (c == '\b')
     {
@@ -229,10 +305,13 @@ void rendering_putchar(char c)
     }
 
 
-    /* Draw character */
+    /*
+     * Draw character.
+     */
 
     VGA_MEMORY[
-        cursor_y * VGA_WIDTH + cursor_x
+        cursor_y * VGA_WIDTH +
+        cursor_x
     ] =
         make_entry(
             c,
@@ -243,11 +322,14 @@ void rendering_putchar(char c)
     cursor_x++;
 
 
-    /* Move to next line */
+    /*
+     * Move to next line.
+     */
 
     if (cursor_x >= VGA_WIDTH)
     {
         cursor_x = 0;
+
         cursor_y++;
 
         scroll();
@@ -258,15 +340,15 @@ void rendering_putchar(char c)
 }
 
 
-/* -------------------------------------------------
+/* =================================================
    Backspace
-   ------------------------------------------------- */
+   ================================================= */
 
 void rendering_backspace(void)
 {
     /*
-     * Don't backspace past the beginning
-     * of the screen.
+     * Don't go backwards past the
+     * beginning of the current line.
      */
 
     if (cursor_x == 0)
@@ -277,7 +359,8 @@ void rendering_backspace(void)
 
 
     VGA_MEMORY[
-        cursor_y * VGA_WIDTH + cursor_x
+        cursor_y * VGA_WIDTH +
+        cursor_x
     ] =
         make_entry(
             ' ',
@@ -289,9 +372,9 @@ void rendering_backspace(void)
 }
 
 
-/* -------------------------------------------------
-   Print string
-   ------------------------------------------------- */
+/* =================================================
+   Print String
+   ================================================= */
 
 void rendering_print(const char *str)
 {
@@ -304,13 +387,65 @@ void rendering_print(const char *str)
 }
 
 
-/* -------------------------------------------------
-   Print string + newline
-   ------------------------------------------------- */
+/* =================================================
+   Print String + Newline
+   ================================================= */
 
 void rendering_println(const char *str)
 {
     rendering_print(str);
 
     rendering_putchar('\n');
+}
+
+
+/* =================================================
+   Print Unsigned Number
+   ================================================= */
+
+void rendering_print_number(uint32_t number)
+{
+    char buffer[11];
+
+    int i = 0;
+
+
+    /*
+     * Special case for zero.
+     */
+
+    if (number == 0)
+    {
+        rendering_putchar('0');
+
+        return;
+    }
+
+
+    /*
+     * Convert number to characters.
+     */
+
+    while (number > 0)
+    {
+        buffer[i++] =
+            '0' + (number % 10);
+
+        number /= 10;
+    }
+
+
+    /*
+     * Print backwards because the
+     * digits were generated backwards.
+     */
+
+    while (i > 0)
+    {
+        i--;
+
+        rendering_putchar(
+            buffer[i]
+        );
+    }
 }
