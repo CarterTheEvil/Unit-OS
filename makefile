@@ -60,7 +60,7 @@ boot_kernel.o: boot_kernel.asm
 # C files
 # ================================================
 
-main.o: main.c rendering.h keyboard.h
+main.o: main.c rendering.h keyboard.h timer.h
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
 
@@ -74,6 +74,10 @@ keyboard.o: keyboard.c keyboard.h
 
 interrupts.o: interrupts.c
 	$(CC) $(CFLAGS) -c interrupts.c -o interrupts.o
+
+
+timer.o: timer.c timer.h
+	$(CC) $(CFLAGS) -c timer.c -o timer.o
 
 
 # ================================================
