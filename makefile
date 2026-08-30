@@ -7,7 +7,6 @@ CFLAGS = -m32 \
          -fno-pie \
          -fno-stack-protector \
          -nostdlib \
-         -nostdinc \
          -Wall \
          -Wextra
 
