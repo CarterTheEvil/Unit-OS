@@ -1,10 +1,10 @@
 #include "rendering.h"
 #include "keyboard.h"
 
+extern void interrupts_init(void);
 
 #define INPUT_SIZE 128
 #define HISTORY_SIZE 10
-
 
 static char input[INPUT_SIZE];
 
@@ -15,6 +15,10 @@ static int history_position = -1;
 
 static int ke_mode = 0;
 
+
+/* -------------------------------------------------
+   Basic string functions
+   ------------------------------------------------- */
 
 static int string_length(const char *str)
 {
@@ -27,10 +31,7 @@ static int string_length(const char *str)
 }
 
 
-static int string_equals(
-    const char *a,
-    const char *b
-)
+static int string_equals(const char *a, const char *b)
 {
     int i = 0;
 
@@ -46,10 +47,7 @@ static int string_equals(
 }
 
 
-static int string_starts_with(
-    const char *str,
-    const char *prefix
-)
+static int string_starts_with(const char *str, const char *prefix)
 {
     int i = 0;
 
@@ -65,10 +63,7 @@ static int string_starts_with(
 }
 
 
-static void string_copy(
-    char *destination,
-    const char *source
-)
+static void string_copy(char *destination, const char *source)
 {
     int i = 0;
 
@@ -82,6 +77,35 @@ static void string_copy(
 }
 
 
+/* -------------------------------------------------
+   Command history
+   ------------------------------------------------- */
+
+static void save_history(const char *command)
+{
+    if (command[0] == '\0')
+        return;
+
+    if (history_count > 0)
+    {
+        int last = (history_count - 1) % HISTORY_SIZE;
+
+        if (string_equals(history[last], command))
+            return;
+    }
+
+    int index = history_count % HISTORY_SIZE;
+
+    string_copy(history[index], command);
+
+    history_count++;
+}
+
+
+/* -------------------------------------------------
+   Clear currently typed command
+   ------------------------------------------------- */
+
 static void clear_current_input(int length)
 {
     for (int i = 0; i < length; i++)
@@ -89,162 +113,85 @@ static void clear_current_input(int length)
 }
 
 
-static void save_history(const char *command)
-{
-    if (command[0] == '\0')
-        return;
-
-
-    /*
-     * Don't save duplicate consecutive commands.
-     */
-
-    if (history_count > 0)
-    {
-        if (string_equals(
-            history[
-                (history_count - 1) % HISTORY_SIZE
-            ],
-            command))
-        {
-            return;
-        }
-    }
-
-
-    int index = history_count % HISTORY_SIZE;
-
-    string_copy(
-        history[index],
-        command
-    );
-
-    history_count++;
-}
-
+/* -------------------------------------------------
+   Unit-OS commands
+   ------------------------------------------------- */
 
 static void execute_command(char *command)
 {
-    if (command[0] == '\0')
-        return;
-
-
-    /*
-     * HELP
-     */
+    /* HELP */
 
     if (string_equals(command, "help"))
     {
-        rendering_println(
-            "Unit-OS commands:"
-        );
-
-        rendering_println(
-            "  help       - Show this help"
-        );
-
-        rendering_println(
-            "  clear      - Clear the screen"
-        );
-
-        rendering_println(
-            "  echo       - Print text"
-        );
-
-        rendering_println(
-            "  ke         - Enter kernel mode"
-        );
-
-        rendering_println(
-            "  exit       - Halt Unit-OS"
-        );
-
-        rendering_println(
-            "  ke exit    - Leave kernel mode"
-        );
+        rendering_println("Unit-OS commands:");
+        rendering_println("  help       - Show this help");
+        rendering_println("  clear      - Clear the screen");
+        rendering_println("  echo       - Print text");
+        rendering_println("  ke         - Enter kernel mode");
+        rendering_println("  ke exit    - Leave kernel mode");
+        rendering_println("  exit       - Halt Unit-OS");
 
         return;
     }
 
 
-    /*
-     * CLEAR
-     */
+    /* CLEAR */
 
     if (string_equals(command, "clear"))
     {
         rendering_clear();
+
         return;
     }
 
 
-    /*
-     * ECHO
-     */
+    /* ECHO */
 
     if (string_starts_with(command, "echo "))
     {
         rendering_println(command + 5);
+
         return;
     }
 
 
-    /*
-     * KE
-     */
+    /* KE */
 
     if (string_equals(command, "ke"))
     {
         ke_mode = 1;
 
-        rendering_println(
-            "[KE] Kernel mode enabled."
-        );
+        rendering_println("[KE] Kernel mode enabled.");
 
         return;
     }
 
 
-    /*
-     * LEAVE KE
-     */
+    /* LEAVE KE */
 
     if (string_equals(command, "ke exit"))
     {
         ke_mode = 0;
 
-        rendering_println(
-            "[KE] Kernel mode disabled."
-        );
+        rendering_println("[KE] Kernel mode disabled.");
 
         return;
     }
 
 
-    /*
-     * EXIT
-     */
+    /* EXIT */
 
     if (string_equals(command, "exit"))
     {
         if (!ke_mode)
         {
-            rendering_println(
-                "Permission denied."
-            );
-
-            rendering_println(
-                "Use 'ke' first."
-            );
+            rendering_println("Permission denied.");
+            rendering_println("Use 'ke' first.");
 
             return;
         }
 
-
-        rendering_println(
-            "Unit-OS shutting down..."
-        );
-
+        rendering_println("Unit-OS shutting down...");
 
         asm volatile ("cli");
 
@@ -253,17 +200,16 @@ static void execute_command(char *command)
     }
 
 
-    /*
-     * Unknown command
-     */
+    /* UNKNOWN COMMAND */
 
-    rendering_print(
-        "Unknown command: "
-    );
-
+    rendering_print("Unknown command: ");
     rendering_println(command);
 }
 
+
+/* -------------------------------------------------
+   Read keyboard input
+   ------------------------------------------------- */
 
 static int read_line(void)
 {
@@ -271,11 +217,15 @@ static int read_line(void)
 
     history_position = -1;
 
-
     while (1)
     {
         int key = keyboard_getkey();
 
+
+        /*
+         * No key yet.
+         * Halt CPU until an interrupt occurs.
+         */
 
         if (key == 0)
         {
@@ -326,7 +276,6 @@ static int read_line(void)
             if (history_count == 0)
                 continue;
 
-
             if (history_position == -1)
             {
                 history_position =
@@ -348,16 +297,13 @@ static int read_line(void)
 
             clear_current_input(length);
 
-
             string_copy(
                 input,
                 history[index]
             );
 
-
             length =
                 string_length(input);
-
 
             rendering_print(input);
 
@@ -375,30 +321,22 @@ static int read_line(void)
                 continue;
 
 
-            if (
-                history_position <
-                history_count - 1
-            )
+            if (history_position < history_count - 1)
             {
                 history_position++;
 
                 int index =
-                    history_position %
-                    HISTORY_SIZE;
-
+                    history_position % HISTORY_SIZE;
 
                 clear_current_input(length);
-
 
                 string_copy(
                     input,
                     history[index]
                 );
 
-
                 length =
                     string_length(input);
-
 
                 rendering_print(input);
             }
@@ -409,6 +347,7 @@ static int read_line(void)
                 clear_current_input(length);
 
                 length = 0;
+
                 input[0] = '\0';
             }
 
@@ -417,61 +356,84 @@ static int read_line(void)
 
 
         /*
-         * Regular character
+         * NORMAL CHARACTERS
          */
 
         if (key >= 32 && key <= 126)
         {
             if (length < INPUT_SIZE - 1)
             {
-                input[length] =
-                    (char)key;
+                input[length] = (char)key;
 
                 length++;
 
                 input[length] = '\0';
 
-                rendering_putchar(
-                    (char)key
-                );
+                rendering_putchar((char)key);
             }
         }
     }
 }
 
 
+/* -------------------------------------------------
+   Unit-OS Kernel Main
+   ------------------------------------------------- */
+
 void kernel_main(
     unsigned int magic,
     unsigned int multiboot_info
 )
 {
+    /*
+     * GRUB provides these values.
+     * We don't use them yet.
+     */
+
     (void)magic;
     (void)multiboot_info;
 
 
+    /*
+     * Initialize VGA rendering.
+     */
+
     rendering_init();
+
+
+    /*
+     * Initialize keyboard.
+     */
 
     keyboard_init();
 
 
-    rendering_println(
-        "Welcome to Unit OS"
-    );
+    /*
+     * Initialize IDT + PIC + IRQs.
+     */
 
-    rendering_println(
-        "------------------"
-    );
+    interrupts_init();
 
-    rendering_println(
-        "Unit-OS v0.1"
-    );
 
-    rendering_println(
-        "Type 'help' for commands."
-    );
+    /*
+     * Unit-OS startup screen.
+     */
 
+    rendering_println("Welcome to Unit OS");
+    rendering_println("------------------");
+    rendering_println("");
+    rendering_println("Unit-OS v0.1");
+    rendering_println("Kernel initialized successfully.");
+    rendering_println("Keyboard initialized.");
+    rendering_println("Interrupts initialized.");
+    rendering_println("");
+    rendering_println("Type 'help' for a list of commands.");
     rendering_println("");
 
+
+    /*
+     * Main shell loop.
+     */
 
     while (1)
     {
@@ -481,16 +443,12 @@ void kernel_main(
             rendering_print("UnitOS> ");
 
 
-        int length = read_line();
+        read_line();
+
 
         save_history(input);
 
+
         execute_command(input);
-
-        /*
-         * Avoid unused-variable warnings.
-         */
-
-        (void)length;
     }
 }
