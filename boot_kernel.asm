@@ -80,10 +80,13 @@ keyboard_isr:
 
     call keyboard_handler
 
+    ; Send End Of Interrupt to the master PIC
+    mov al, 0x20
+    out 0x20, al
+
     popa
 
     iretd
-
 
 ; ------------------------------------------------
 ; GDT
