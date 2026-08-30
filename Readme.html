@@ -123,6 +123,22 @@
             font-size: 13px;
             color: #006600;
         }
+        .license-box {
+            background: #E0FFFF;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #006666;
+        }
+        .bug-disclaimer {
+            background: #FFF0E0;
+            border: 2px inset #808080;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #CC6600;
+        }
         TABLE.file-table {
             border-collapse: collapse;
             width: 100%;
@@ -160,6 +176,10 @@
         }
         .status-wip {
             color: #CC6600;
+            font-weight: bold;
+        }
+        .status-stable {
+            color: #006600;
             font-weight: bold;
         }
         HR {
@@ -202,6 +222,17 @@
             font-size: 13px;
             color: #800000;
         }
+        .img-preview {
+            border: 2px inset #808080;
+            padding: 10px;
+            background: #FFFFFF;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .img-preview IMG {
+            max-width: 100%;
+            border: 1px solid #000000;
+        }
     </STYLE>
 </HEAD>
 <BODY>
@@ -216,8 +247,8 @@
         |_|  |_||___/ \_/  |___| |_| \___\___/|_|    |_|
     </DIV>
     <DIV CLASS="header-sub">
-        Version 0.0.1 Pre-Alpha &bull; x86 Bootable &bull; Last Updated: Aug 2026 &bull;
-        <SPAN CLASS="kernel-badge">STATUS: EARLY DEV</SPAN>
+        Version 0.0.3 (Most Stable) &bull; x86 Bootable &bull; Last Updated: Aug 2026 &bull;
+        <SPAN CLASS="kernel-badge">STATUS: STABLE RELEASE</SPAN>
     </DIV>
 
     <!-- Top Bar -->
@@ -237,29 +268,76 @@
             and is written primarily in <A HREF="#">C</A> and <A HREF="#">x86 Assembly</A>.
         </P>
         <P>
-            The current version includes a bootable kernel with a minimal
-            command interpreter, basic rendering, and PS/2 keyboard input support.
+            <B>RECOMMENDED:</B> Download release <A HREF="#download">v0.0.3</A> for the most stable
+            boot experience. Earlier versions may be unstable or incomplete.
         </P>
 
+        <!-- Boot Screenshot Preview -->
+        <DIV CLASS="img-preview">
+            <B>Unit-OS v0.0.3 Booted Successfully</B><BR>
+            <SMALL>(See Bootead.png in repository for full screenshot)</SMALL>
+        </DIV>
+
         <TABLE CLASS="status-table">
-            <TR><TD WIDTH="140"><B>Project Status:</B></TD><TD><SPAN CLASS="status-wip">Early Development</SPAN> &mdash; Super simple core features only</TD></TR>
-            <TR><TD><B>Version:</B></TD><TD>0.0.1 Pre-Alpha (Tag: v0.0.1)</TD></TR>
+            <TR><TD WIDTH="140"><B>Project Status:</B></TD><TD><SPAN CLASS="status-stable">Stable Release</SPAN> &mdash; v0.0.3 recommended for testing</TD></TR>
+            <TR><TD><B>Version:</B></TD><TD>0.0.3 Pre-Alpha (4 tags total)</TD></TR>
             <TR><TD><B>Architecture:</B></TD><TD>x86 (32-bit), boots in QEMU</TD></TR>
-            <TR><TD><B>File Count:</B></TD><TD><SPAN CLASS="status-ok">9 source files</SPAN> &mdash; Ready to compile</TD></TR>
-            <TR><TD><B>Languages:</B></TD><TD>C (84.8%), Assembly (7.9%), Makefile (6.1%), Linker Script (1.2%)</TD></TR>
+            <TR><TD><B>File Count:</B></TD><TD><SPAN CLASS="status-ok">13 files</SPAN> &mdash; Ready to compile</TD></TR>
+            <TR><TD><B>Commit Count:</B></TD><TD><SPAN CLASS="status-ok">43 commits</SPAN> to main branch</TD></TR>
+            <TR><TD><B>Languages:</B></TD><TD>C (82.3%), Assembly (10.2%), Makefile (6.9%), Linker Script (0.6%)</TD></TR>
         </TABLE>
+
+        <HR>
+
+        <!-- License / Open Source -->
+        <DIV CLASS="license-box">
+            <B>&#9851; OPEN SOURCE LICENSE</B><BR><BR>
+            This project is <B>free and open-source</B>. You are permitted to:<BR>
+            &bull; <B>Edit</B> the source code however you wish<BR>
+            &bull; <B>Redistribute</B> copies to others<BR>
+            &bull; <B>Fork</B> and create derivative works<BR>
+            <BR>
+            This is a hobby project released for fun and learning. No restrictions on
+            personal use, modification, or sharing. Just don't claim it as yours!
+        </DIV>
+
+        <!-- Solo Dev Disclaimer -->
+        <DIV CLASS="bug-disclaimer">
+            <B>BUG REPORT NOTICE</B><BR><BR>
+            If you encounter bugs or issues, please note that this is a <B>solo project</B>.<BR>
+            I am not working with a development team or second person.<BR>
+            <BR>
+            Reported issues <B>will take a moment</B> for me to investigate and fix.
+            Please be patient! If something doesn't boot or work as an ISO, it likely
+            means it was being updated when you downloaded it—try the latest release.
+        </DIV>
 
         <HR>
 
         <!-- Core Files -->
         <H1>Source Files</H1>
-        <P>Here is the current file listing (<B>9 files</B> total, excluding README):</P>
+        <P>Here is the current file listing (<B>13 files</B> total):</P>
 
         <TABLE CLASS="file-table">
             <TR>
                 <TH>File</TH>
                 <TH>Role</TH>
                 <TH>Status</TH>
+            </TR>
+            <TR>
+                <TD><A HREF="#">Booted.png</A></TD>
+                <TD>Screenshot of successful v0.0.3 boot</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">Readme.html</A></TD>
+                <TD>This page (visual README)</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">Readme.md</A></TD>
+                <td>Markdown README for GitHub view</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
             </TR>
             <TR>
                 <TD><A HREF="#">boot_kernel.asm</A></TD>
@@ -283,7 +361,7 @@
             </TR>
             <TR>
                 <TD><A HREF="#">keyboard.c</A></TD>
-                <TD>PS/2 scan code driver (working!)</TD>
+                <TD>PS/2 scan code driver</TD>
                 <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
             </TR>
             <TR>
@@ -293,12 +371,22 @@
             </TR>
             <TR>
                 <TD><A HREF="#">rendering.c</A></TD>
-                <TD>Video mode &amp; text rendering</TD>
+                <TD>VGA text mode &amp; screen rendering</TD>
                 <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
             </TR>
             <TR>
                 <TD><A HREF="#">rendering.h</A></TD>
-                <TD>Rendering header & function prototypes</TD>
+                <TD>Rendering header & VGA color defines</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">timer.c</A></TD>
+                <TD>PIT timer integration</TD>
+                <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
+            </TR>
+            <TR>
+                <TD><A HREF="#">timer.h</A></TD>
+                <TD>Timer header for PIT functionality</TD>
                 <TD><SPAN CLASS="status-ok">Complete</SPAN></TD>
             </TR>
             <TR>
@@ -369,14 +457,18 @@
         </TABLE>
 
         <DIV CLASS="note-box">
-            <B>✅ Ready to Build:</B> All 9 source files are present and the project is
-            ready for compilation. The WIP stage is complete for basic boot functionality!
+            <B>✅ Ready to Build:</B> All 13 files are present and the project is
+            ready for compilation. Version 0.0.3 is the most stable release!
         </DIV>
 
         <HR>
 
         <!-- Download -->
         <H1>Download</H1>
+        <P>
+            <B>Recommended:</B> Download <A HREF="#">v0.0.3 release</A> for the most stable experience.
+            Raw main branch may contain unstable in-progress changes.
+        </P>
         <P>
             The full source is available on GitHub.
             You can clone or download the repository directly:
@@ -385,8 +477,11 @@
             <A HREF="https://github.com/CarterTheEvil2000/Unit-OS" CLASS="btn-download" TARGET="_blank">
                 &#9660; Clone from GitHub
             </A>
+            <A HREF="https://github.com/CarterTheEvil2000/Unit-OS/archive/refs/tags/v0.0.3.zip" CLASS="btn-download" TARGET="_blank">
+                &#9660; Download v0.0.3 (.zip)
+            </A>
             <A HREF="https://github.com/CarterTheEvil2000/Unit-OS/archive/refs/heads/main.zip" CLASS="btn-download" TARGET="_blank">
-                &#9660; Download .zip
+                &#9660; Download main branch (.zip)
             </A>
         </P>
         <P ALIGN="CENTER" STYLE="font-size:11px; color:#666666;">
@@ -398,13 +493,19 @@
         <!-- FAQ -->
         <H1>F.A.Q.</H1>
         <P><B>Q: Why does it look like a text mode OS?</B></P>
-        <P>A: It's Pre-Alpha v0.0.1. Text mode rendering is the foundation—we're not doing fancy graphics yet!</P>
+        <P>A: It's Pre-Alpha v0.0.3. Text mode rendering is the foundation—we're not doing fancy graphics yet!</P>
 
         <P><B>Q: Can I run this on real hardware?</B></P>
         <P>A: Technically yes (GRUB + any x86 machine), but please don't. Use QEMU unless you have spare hardware.</P>
 
         <P><B>Q: Does the keyboard work?</B></P>
         <P>A: Yes! But it's PS/2 only. Modern USB keyboards won't be recognized without an adapter or PS/2 motherboard ports. Again, QEMU solves this.</P>
+
+        <P><B>Q: Is this open source?</B></P>
+        <P>A: Yes! You're free to edit, redistribute, and fork the code. Just don't claim it as your own work.</P>
+
+        <P><B>Q: What if I find a bug?</B></P>
+        <P>A: Please report it! But remember I'm a solo developer, so it might take a moment for me to investigate. Thanks for your patience!</P>
 
         <P><B>Q: What's the roadmap?</B></P>
         <P>A: More interrupts, a proper keyboard buffer, basic file I/O, and eventually
@@ -433,3 +534,4 @@
 
 </BODY>
 </HTML>
+
