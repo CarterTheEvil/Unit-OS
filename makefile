@@ -37,7 +37,8 @@ OBJECTS = \
     main.o \
     rendering.o \
     keyboard.o \
-    interrupts.o
+    interrupts.o \
+    timer.o
 
 
 # ================================================
