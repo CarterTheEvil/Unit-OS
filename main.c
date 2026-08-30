@@ -1,5 +1,6 @@
 #include "rendering.h"
 #include "keyboard.h"
+#include "timer.h"
 
 extern void interrupts_init(void);
 
@@ -16,9 +17,9 @@ static int history_position = -1;
 static int ke_mode = 0;
 
 
-/* -------------------------------------------------
+/* =================================================
    Basic string functions
-   ------------------------------------------------- */
+   ================================================= */
 
 static int string_length(const char *str)
 {
@@ -77,9 +78,9 @@ static void string_copy(char *destination, const char *source)
 }
 
 
-/* -------------------------------------------------
+/* =================================================
    Command history
-   ------------------------------------------------- */
+   ================================================= */
 
 static void save_history(const char *command)
 {
@@ -102,9 +103,9 @@ static void save_history(const char *command)
 }
 
 
-/* -------------------------------------------------
+/* =================================================
    Clear currently typed command
-   ------------------------------------------------- */
+   ================================================= */
 
 static void clear_current_input(int length)
 {
@@ -113,9 +114,9 @@ static void clear_current_input(int length)
 }
 
 
-/* -------------------------------------------------
-   Unit-OS commands
-   ------------------------------------------------- */
+/* =================================================
+   Execute commands
+   ================================================= */
 
 static void execute_command(char *command)
 {
@@ -127,8 +128,16 @@ static void execute_command(char *command)
         rendering_println("  help       - Show this help");
         rendering_println("  clear      - Clear the screen");
         rendering_println("  echo       - Print text");
+        rendering_println("  history    - Show command history");
+        rendering_println("  about      - About Unit-OS");
+        rendering_println("  version    - Show Unit-OS version");
+        rendering_println("  cpu        - Show CPU information");
+        rendering_println("  mem        - Show memory information");
+        rendering_println("  uptime     - Show system uptime");
         rendering_println("  ke         - Enter kernel mode");
         rendering_println("  ke exit    - Leave kernel mode");
+        rendering_println("  reboot     - Reboot the system");
+        rendering_println("  shutdown   - Shut down Unit-OS");
         rendering_println("  exit       - Halt Unit-OS");
 
         return;
@@ -150,6 +159,125 @@ static void execute_command(char *command)
     if (string_starts_with(command, "echo "))
     {
         rendering_println(command + 5);
+
+        return;
+    }
+
+
+    /* HISTORY */
+
+    if (string_equals(command, "history"))
+    {
+        int start = 0;
+
+        if (history_count > HISTORY_SIZE)
+            start = history_count - HISTORY_SIZE;
+
+        for (int i = start; i < history_count; i++)
+        {
+            int index = i % HISTORY_SIZE;
+
+            rendering_print(history[index]);
+            rendering_putchar('\n');
+        }
+
+        return;
+    }
+
+
+    /* ABOUT */
+
+    if (string_equals(command, "about"))
+    {
+        rendering_println("Unit-OS");
+        rendering_println("-------");
+        rendering_println("A tiny hobby operating system");
+        rendering_println("");
+        rendering_println("Version: 0.0.3");
+        rendering_println("Architecture: x86 (32-bit)");
+        rendering_println("Shell: UnitShell");
+        rendering_println("Display: VGA Text Mode");
+        rendering_println("Keyboard: PS/2");
+        rendering_println("Timer: PIT");
+        rendering_println("");
+
+        return;
+    }
+
+
+    /* VERSION */
+
+    if (string_equals(command, "version"))
+    {
+        rendering_println("Unit-OS version 0.0.3");
+
+        return;
+    }
+
+
+    /* CPU */
+
+    if (string_equals(command, "cpu"))
+    {
+        rendering_println("CPU");
+        rendering_println("---");
+        rendering_println("Architecture: x86");
+        rendering_println("Mode: 32-bit");
+
+        return;
+    }
+
+
+    /* MEMORY */
+
+    if (string_equals(command, "mem"))
+    {
+        rendering_println("Memory");
+        rendering_println("------");
+        rendering_println("Memory manager: Not initialized");
+        rendering_println("Detailed memory information coming later.");
+
+        return;
+    }
+
+
+    /* UPTIME */
+
+    if (string_equals(command, "uptime"))
+    {
+        uint32_t seconds = timer_get_seconds();
+
+        uint32_t hours = seconds / 3600;
+
+        seconds %= 3600;
+
+        uint32_t minutes = seconds / 60;
+
+        seconds %= 60;
+
+
+        rendering_print("Uptime: ");
+
+        if (hours < 10)
+            rendering_putchar('0');
+
+        rendering_print_number(hours);
+
+        rendering_putchar(':');
+
+        if (minutes < 10)
+            rendering_putchar('0');
+
+        rendering_print_number(minutes);
+
+        rendering_putchar(':');
+
+        if (seconds < 10)
+            rendering_putchar('0');
+
+        rendering_print_number(seconds);
+
+        rendering_putchar('\n');
 
         return;
     }
@@ -179,9 +307,30 @@ static void execute_command(char *command)
     }
 
 
-    /* EXIT */
+    /* REBOOT */
 
-    if (string_equals(command, "exit"))
+    if (string_equals(command, "reboot"))
+    {
+        if (!ke_mode)
+        {
+            rendering_println("Permission denied.");
+            rendering_println("Use 'ke' first.");
+
+            return;
+        }
+
+        rendering_println("Rebooting Unit-OS...");
+
+        asm volatile ("cli");
+
+        while (1)
+            asm volatile ("hlt");
+    }
+
+
+    /* SHUTDOWN */
+
+    if (string_equals(command, "shutdown"))
     {
         if (!ke_mode)
         {
@@ -200,16 +349,38 @@ static void execute_command(char *command)
     }
 
 
+    /* EXIT */
+
+    if (string_equals(command, "exit"))
+    {
+        if (!ke_mode)
+        {
+            rendering_println("Permission denied.");
+            rendering_println("Use 'ke' first.");
+
+            return;
+        }
+
+        rendering_println("Unit-OS halted.");
+
+        asm volatile ("cli");
+
+        while (1)
+            asm volatile ("hlt");
+    }
+
+
     /* UNKNOWN COMMAND */
 
     rendering_print("Unknown command: ");
+
     rendering_println(command);
 }
 
 
-/* -------------------------------------------------
+/* =================================================
    Read keyboard input
-   ------------------------------------------------- */
+   ================================================= */
 
 static int read_line(void)
 {
@@ -217,19 +388,20 @@ static int read_line(void)
 
     history_position = -1;
 
+
     while (1)
     {
         int key = keyboard_getkey();
 
 
         /*
-         * No key yet.
-         * Halt CPU until an interrupt occurs.
+         * No key available.
          */
 
         if (key == 0)
         {
             asm volatile ("hlt");
+
             continue;
         }
 
@@ -376,9 +548,9 @@ static int read_line(void)
 }
 
 
-/* -------------------------------------------------
-   Unit-OS Kernel Main
-   ------------------------------------------------- */
+/* =================================================
+   Kernel main
+   ================================================= */
 
 void kernel_main(
     unsigned int magic,
@@ -386,8 +558,7 @@ void kernel_main(
 )
 {
     /*
-     * GRUB provides these values.
-     * We don't use them yet.
+     * Multiboot values aren't being used yet.
      */
 
     (void)magic;
@@ -395,7 +566,7 @@ void kernel_main(
 
 
     /*
-     * Initialize VGA rendering.
+     * Initialize display.
      */
 
     rendering_init();
@@ -409,22 +580,35 @@ void kernel_main(
 
 
     /*
+     * Initialize PIT timer BEFORE
+     * interrupts are enabled.
+     */
+
+    timer_init(100);
+
+
+    /*
      * Initialize IDT + PIC + IRQs.
+     *
+     * interrupts_init() enables CPU interrupts
+     * with STI, so it must come after timer_init().
      */
 
     interrupts_init();
 
 
     /*
-     * Unit-OS startup screen.
+     * Startup screen.
      */
 
     rendering_println("Welcome to Unit OS");
     rendering_println("------------------");
     rendering_println("");
-    rendering_println("Unit-OS v0.1");
+    rendering_println("Unit-OS v0.0.3");
     rendering_println("Kernel initialized successfully.");
-    rendering_println("Keyboard initialized.");
+    rendering_println("VGA rendering initialized.");
+    rendering_println("PS/2 keyboard initialized.");
+    rendering_println("PIT timer initialized.");
     rendering_println("Interrupts initialized.");
     rendering_println("");
     rendering_println("Type 'help' for a list of commands.");
