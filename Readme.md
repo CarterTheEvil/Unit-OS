@@ -1,27 +1,33 @@
-# 🚀 Unit os
+# 🖥️ Unit OS
 
-Welcome to the Unit OS! This repository is currently maintained entirely by a solo developer. 
+Welcome to **Unit OS**! This is a simple, lightweight terminal-based operating system simulation. It features a handful of core commands designed for minimalists—unlike large, heavy distributions like Ubuntu or Debian Server, Unit OS keeps things fast, focused, and streamlined.
+
+👤 **Developer:** [@CarterTheEvil](https://github.com/CarterTheEvil) (Solo Project)
+
+---
 
 ## 📦 Getting Started
 
-Readmes are limited to Markdown and basic HTML. For full, detailed instructions, please view the interactive guide:
-* **Option 1:** [Run `Readme.html` in an online compiler](https://onecompiler.com/html)
-* **Option 2:** Download `Readme.html` and open it directly in your browser.
+Because standard README files are limited to basic Markdown and light HTML formatting, the full instructions are built into an interactive file. 
+
+* **Option 1:** [Run `Readme.html` in an online compiler](https://github.io)
+* **Option 2:** Download `Readme.html` and open it locally in your web browser.
 
 ---
 
 ## ⚠️ Important Release Notes
 
-> 💡 **Recommended Boot Version:** Please download and use the **`0.0.3` release** for a stable and proper way to boot.
+> 💡 **Recommended Version:** For the most stable experience and a proper boot sequence, please download and use the **`0.0.3` release**.
 
 * **Current Version:** `0.0.4`
-* **Project Status:** **Paused.** This project will not receive regular updates unless I decide to come back to it in the future. It will remain at version `0.0.4` for the foreseeable future.
+* **Project Status:** **Paused.** This project will remain at version `0.0.4` for the foreseeable future. Updates will only happen if I decide to return to the project someday.
 
 ---
 
 ## 🐛 Bug Reports & Support
 
-Because I am working entirely alone without a development team:
-* **Fixes take time:** If you encounter any bugs, it will take me some time to investigate and deploy a fix. 
-* **Patience is appreciated:** Please expect delayed responses to issues or bug reports.
+Please keep in mind that I am a independent, solo developer. I do not have a secondary person or a development team backing me up.
+* **Delayed Fixes:** If you run into any bugs or issues, it will take me some time to investigate and fix them. 
+* Thank you for your patience and understanding!
+
 
