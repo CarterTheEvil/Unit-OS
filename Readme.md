@@ -1,7 +1,27 @@
-# Hello and welcome, 
-## Run Readme.html in a online complier or download and run 
-for instruchons as readmes are limited to md forment and some html also I'm not working with a devleper team or a 2nd person so only me so if thares bugs with somthing Ill have to look into it but it might take a while!
-also if thares any bugs 
-> it will take a minite
-for me to fix it so I recommend 0.0.3 realse download for a proper way to boot.
-# This will not be updated Project Unless I come back to it someday, so for now this will be at 0.0.4 for a while
+# 🚀 Unit os
+
+Welcome to the Unit OS! This repository is currently maintained entirely by a solo developer. 
+
+## 📦 Getting Started
+
+Readmes are limited to Markdown and basic HTML. For full, detailed instructions, please view the interactive guide:
+* **Option 1:** [Run `Readme.html` in an online compiler](https://onecompiler.com/html)
+* **Option 2:** Download `Readme.html` and open it directly in your browser.
+
+---
+
+## ⚠️ Important Release Notes
+
+> 💡 **Recommended Boot Version:** Please download and use the **`0.0.3` release** for a stable and proper way to boot.
+
+* **Current Version:** `0.0.4`
+* **Project Status:** **Paused.** This project will not receive regular updates unless I decide to come back to it in the future. It will remain at version `0.0.4` for the foreseeable future.
+
+---
+
+## 🐛 Bug Reports & Support
+
+Because I am working entirely alone without a development team:
+* **Fixes take time:** If you encounter any bugs, it will take me some time to investigate and deploy a fix. 
+* **Patience is appreciated:** Please expect delayed responses to issues or bug reports.
+
