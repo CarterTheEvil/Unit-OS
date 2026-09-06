@@ -1,5 +1,7 @@
-#Hello and welcome, 
-##Run Readme.html in a online complier or download and run 
+# Hello and welcome, 
+## Run Readme.html in a online complier or download and run 
 for instruchons as readmes are limited to md forment and some html also I'm not working with a devleper team or a 2nd person so only me so if thares bugs with somthing Ill have to look into it but it might take a while!
-also if thares any bugs it will take a minite for me to fix it so I recommend 0.0.3 realse download for a proper way to boot.
+also if thares any bugs 
+> it will take a minite
+for me to fix it so I recommend 0.0.3 realse download for a proper way to boot.
 # This will not be updated Project Unless I come back to it someday, so for now this will be at 0.0.4 for a while
